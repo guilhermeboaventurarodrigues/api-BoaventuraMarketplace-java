@@ -1,5 +1,6 @@
 package com.apiempresausers.apiempresausers.entity;
 
+import com.apiempresausers.apiempresausers.entity.enums.DepartamentoFuncionarioEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -9,10 +10,8 @@ public class FuncionarioEntity extends PessoaSuperClass {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NotNull
     private double salario;
-
     @NotNull
     private DepartamentoFuncionarioEnum departamentoEnum;
 

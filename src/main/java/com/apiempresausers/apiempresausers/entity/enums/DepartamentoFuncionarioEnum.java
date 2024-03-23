@@ -1,13 +1,16 @@
-package com.apiempresausers.apiempresausers.entity;
+package com.apiempresausers.apiempresausers.entity.enums;
 
-public enum SegmentoClienteEnum {
-    COMPRADOR(1, "Comprador"),
-    VENDEDOR(2, "Vendedor");
+public enum DepartamentoFuncionarioEnum {
+    RH(1, "Recursos Humanos"),
+    TI(2, "Tecnologia da Informacao"),
+    FINANCEIRO(3, "Financeiro"),
+    VENDAS(4, "Vendas"),
+    MARKETING(5, "Marketing");
 
     private final int valorReferencia;
     private final String nomeReferencia;
 
-    SegmentoClienteEnum(int valorReferencia, String nomeReferencia) {
+    DepartamentoFuncionarioEnum(int valorReferencia, String nomeReferencia) {
         this.valorReferencia = valorReferencia;
         this.nomeReferencia = nomeReferencia;
     }

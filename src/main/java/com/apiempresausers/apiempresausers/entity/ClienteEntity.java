@@ -1,5 +1,6 @@
 package com.apiempresausers.apiempresausers.entity;
 
+import com.apiempresausers.apiempresausers.entity.enums.SegmentoClienteEnum;
 import jakarta.persistence.*;
 
 @Entity

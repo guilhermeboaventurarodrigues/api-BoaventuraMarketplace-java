@@ -1,7 +1,10 @@
 package com.apiempresausers.apiempresausers.controller;
 
+import com.apiempresausers.apiempresausers.entity.ClienteEntity;
 import com.apiempresausers.apiempresausers.entity.FuncionarioEntity;
 import com.apiempresausers.apiempresausers.service.FuncionarioService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +21,7 @@ public class FuncionarioController {
     }
 
     @PostMapping("/create")
-    List<FuncionarioEntity> create(@RequestBody FuncionarioEntity func){
+    FuncionarioEntity create(@RequestBody FuncionarioEntity func){
         return funcionarioService.create(func);
     }
 
@@ -40,5 +43,13 @@ public class FuncionarioController {
     @DeleteMapping("{id}")
     List<FuncionarioEntity> delete(@PathVariable("id") Long id){
         return funcionarioService.delete(id);
+    }
+
+    @PostMapping("/login")
+    boolean validarSenha(@RequestBody FuncionarioEntity func){
+        Boolean valid = funcionarioService.validarSenha(func);
+        if (!valid){
+            return false;
+        } return true;
     }
 }
