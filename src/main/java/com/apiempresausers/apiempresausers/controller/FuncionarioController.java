@@ -21,35 +21,36 @@ public class FuncionarioController {
     }
 
     @PostMapping("/create")
-    FuncionarioEntity create(@RequestBody FuncionarioEntity func){
-        return funcionarioService.create(func);
+    ResponseEntity<FuncionarioEntity> create(@RequestBody FuncionarioEntity func){
+        return ResponseEntity.status(201).body(funcionarioService.create(func));
     }
 
     @GetMapping("/get")
-    List<FuncionarioEntity> list(){
-        return funcionarioService.list();
+    ResponseEntity<List<FuncionarioEntity>> list(){
+        return ResponseEntity.status(200).body(funcionarioService.list());
     }
 
     @GetMapping("/get/{id}")
-    Optional<FuncionarioEntity> listById(@PathVariable("id") Long id){
-        return funcionarioService.listById(id);
+    ResponseEntity<Optional<FuncionarioEntity>> listById(@PathVariable("id") Long id){
+        return ResponseEntity.status(200).body(funcionarioService.listById(id));
     }
 
     @PutMapping("/put")
-    List<FuncionarioEntity> update(@RequestBody FuncionarioEntity func){
-        return funcionarioService.update(func);
+    ResponseEntity<List<FuncionarioEntity>> update(@RequestBody FuncionarioEntity func){
+        return ResponseEntity.status(200).body(funcionarioService.update(func));
     }
 
     @DeleteMapping("{id}")
-    List<FuncionarioEntity> delete(@PathVariable("id") Long id){
-        return funcionarioService.delete(id);
+   ResponseEntity<?> delete(@PathVariable("id") Long id){
+        funcionarioService.delete(id);
+        return ResponseEntity.status(204).build();
     }
 
     @PostMapping("/login")
-    boolean validarSenha(@RequestBody FuncionarioEntity func){
+    ResponseEntity<FuncionarioEntity> validarSenha(@RequestBody FuncionarioEntity func){
         Boolean valid = funcionarioService.validarSenha(func);
         if (!valid){
-            return false;
-        } return true;
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } return ResponseEntity.status(200).build();
     }
 }
