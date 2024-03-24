@@ -1,10 +1,12 @@
 package com.apiempresausers.apiempresausers.entity;
 
 import com.apiempresausers.apiempresausers.entity.enums.DepartamentoFuncionarioEnum;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
+@JsonPropertyOrder({"id",  "login", "password", "nome", "dataDeNascimento", "cpf", "departamentoEnum", "salario"})
 @Table(name="funcionarios")
 public class FuncionarioEntity extends PessoaSuperClass {
     @Id

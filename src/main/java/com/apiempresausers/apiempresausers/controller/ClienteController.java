@@ -2,6 +2,7 @@ package com.apiempresausers.apiempresausers.controller;
 
 import com.apiempresausers.apiempresausers.entity.ClienteEntity;
 import com.apiempresausers.apiempresausers.service.ClienteService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,27 +20,29 @@ public class ClienteController {
     }
 
     @PostMapping("/create")
-    ClienteEntity create(@RequestBody ClienteEntity cliente){
-        return clienteService.create(cliente);
+    ResponseEntity<ClienteEntity> create(@RequestBody ClienteEntity cliente) {
+        return ResponseEntity.status(201).body(clienteService.create(cliente));
     }
 
     @GetMapping("/get")
-    List<ClienteEntity> listAll(){
-        return clienteService.listAll();
+    ResponseEntity<List<ClienteEntity>> listAll() {
+        return ResponseEntity.status(200).body(clienteService.listAll());
     }
 
     @GetMapping("/get/{id}")
-    Optional<ClienteEntity> listById(@PathVariable("id") Long id){
-        return clienteService.listById(id);
+    ResponseEntity<ClienteEntity> listById(@PathVariable("id") Long id) {
+        return ResponseEntity.status(200).body(clienteService.listById(id));
     }
 
-    @PutMapping("/edit")
-    String update(ClienteEntity cliente){
-        return clienteService.update(cliente);
+    @PutMapping("/edit/{id}")
+    ResponseEntity<ClienteEntity> update(@RequestBody ClienteEntity cliente, @PathVariable("id") Long id) {
+        ClienteEntity updated  = clienteService.update(cliente, id);
+        return ResponseEntity.status(201).body(updated);
     }
 
     @DeleteMapping("/delete/{id}")
-    String delete(@PathVariable("id") Long id){
-        return clienteService.delete(id);
+    ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+        clienteService.delete(id);
+        return ResponseEntity.status(204).build();
     }
 }

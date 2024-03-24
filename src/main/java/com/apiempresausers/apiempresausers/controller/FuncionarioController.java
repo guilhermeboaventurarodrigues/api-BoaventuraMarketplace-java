@@ -1,6 +1,5 @@
 package com.apiempresausers.apiempresausers.controller;
 
-import com.apiempresausers.apiempresausers.entity.ClienteEntity;
 import com.apiempresausers.apiempresausers.entity.FuncionarioEntity;
 import com.apiempresausers.apiempresausers.service.FuncionarioService;
 import org.springframework.http.HttpStatus;
@@ -8,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 
@@ -22,26 +20,30 @@ public class FuncionarioController {
 
     @PostMapping("/create")
     ResponseEntity<FuncionarioEntity> create(@RequestBody FuncionarioEntity func){
-        return ResponseEntity.status(201).body(funcionarioService.create(func));
+        FuncionarioEntity create = funcionarioService.create(func);
+        return ResponseEntity.status(201).body(create);
     }
 
     @GetMapping("/get")
     ResponseEntity<List<FuncionarioEntity>> list(){
-        return ResponseEntity.status(200).body(funcionarioService.list());
+        List<FuncionarioEntity> list = funcionarioService.list();
+        return ResponseEntity.status(200).body(list);
     }
 
     @GetMapping("/get/{id}")
-    ResponseEntity<Optional<FuncionarioEntity>> listById(@PathVariable("id") Long id){
-        return ResponseEntity.status(200).body(funcionarioService.listById(id));
+    ResponseEntity<FuncionarioEntity> listById(@PathVariable("id") Long id){
+        FuncionarioEntity listById = funcionarioService.listById(id);
+        return ResponseEntity.status(200).body(listById);
     }
 
-    @PutMapping("/put")
-    ResponseEntity<List<FuncionarioEntity>> update(@RequestBody FuncionarioEntity func){
-        return ResponseEntity.status(200).body(funcionarioService.update(func));
+    @PutMapping("/put/{id}")
+    ResponseEntity<FuncionarioEntity> update(@RequestBody FuncionarioEntity func, @PathVariable("id") Long id){
+        FuncionarioEntity update = funcionarioService.update(func, id);
+        return ResponseEntity.status(200).body(update);
     }
 
-    @DeleteMapping("{id}")
-   ResponseEntity<?> delete(@PathVariable("id") Long id){
+    @DeleteMapping("/delete/{id}")
+   ResponseEntity<Void> delete(@PathVariable("id") Long id){
         funcionarioService.delete(id);
         return ResponseEntity.status(204).build();
     }
