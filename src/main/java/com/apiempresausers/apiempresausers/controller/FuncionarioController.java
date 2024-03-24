@@ -25,8 +25,8 @@ public class FuncionarioController {
     }
 
     @GetMapping("/get")
-    ResponseEntity<List<FuncionarioEntity>> list(){
-        List<FuncionarioEntity> list = funcionarioService.list();
+    ResponseEntity<List<FuncionarioEntity>> listAll(){
+        List<FuncionarioEntity> list = funcionarioService.listAll();
         return ResponseEntity.status(200).body(list);
     }
 

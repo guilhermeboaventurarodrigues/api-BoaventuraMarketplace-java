@@ -34,7 +34,7 @@ public class FuncionarioService {
         ));
     }
 
-    public List<FuncionarioEntity> list() {
+    public List<FuncionarioEntity> listAll() {
         return funcionarioRepository.findAll();
     }
 
@@ -50,8 +50,8 @@ public class FuncionarioService {
         listById(id);
         try {
             funcionarioRepository.deleteById(id);
-        } catch (Exception e) {
-            throw new RuntimeException("Não foi possivel excluir pois não encontramos esse ID no nosso banco de dados!");
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Usuario não encontrado!");
         }
     }
 
