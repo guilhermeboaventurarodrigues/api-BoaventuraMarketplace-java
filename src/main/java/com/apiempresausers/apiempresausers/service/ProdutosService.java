@@ -2,13 +2,16 @@ package com.apiempresausers.apiempresausers.service;
 
 import com.apiempresausers.apiempresausers.entity.ClienteEntity;
 import com.apiempresausers.apiempresausers.entity.ProdutosEntity;
+import com.apiempresausers.apiempresausers.entity.dto.GetProdutosDTO;
+import com.apiempresausers.apiempresausers.entity.dto.SetProdutosDTO;
+import com.apiempresausers.apiempresausers.entity.dto.UpdateProdutosDTO;
 import com.apiempresausers.apiempresausers.repository.ProdutosRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProdutosService {
@@ -23,38 +26,57 @@ public class ProdutosService {
     }
 
     @Transactional
-    public ProdutosEntity create(ProdutosEntity prod) {
-        ClienteEntity donoProduto = clienteService.listById(prod.getDono_produto_id().getId());
-        prod.setDono_produto_id(donoProduto);
-        return this.produtosRepository.save(prod);
+    public ProdutosEntity create(SetProdutosDTO prod) {
+        ProdutosEntity produtosEntity = new ProdutosEntity();
+        produtosEntity.setNome_produto(prod.getNome_produto());
+        produtosEntity.setDescricao_produto(prod.getDescricao_produto());
+        produtosEntity.setValor_produto(prod.getValor_produto());
+        produtosEntity.setOfferActive(prod.isOfferActive());
+
+        ClienteEntity donoProduto = clienteService.listById(prod.getDono_produto_id());
+        produtosEntity.setDono_produto_id(donoProduto);
+
+        return this.produtosRepository.save(produtosEntity);
     }
 
 
-    public List<ProdutosEntity> listAll() {
-        return produtosRepository.findAll();
+    public List<GetProdutosDTO> listAll() {
+        List<ProdutosEntity> produtosEntities = produtosRepository.findAll();
+
+        List<GetProdutosDTO> produtosDTOList = new ArrayList<>();
+
+        for (ProdutosEntity produtoEntity1 : produtosEntities) {
+            GetProdutosDTO produtoDTO = new GetProdutosDTO(produtoEntity1);
+            produtosDTOList.add(produtoDTO);
+        }
+
+        return produtosDTOList;
     }
 
-    public ProdutosEntity listById(Long id) {
-        Optional<ProdutosEntity> listed = produtosRepository.findById(id);
-        return listed.orElseThrow(() -> new RuntimeException(
+    public GetProdutosDTO listById(Long id) {
+        ProdutosEntity listed = produtosRepository.findById(id).orElseThrow(() -> new RuntimeException(
                 "ID de produto não encontrado"
         ));
+
+        return new GetProdutosDTO(listed);
     }
 
     @Transactional
-    public ProdutosEntity update(ProdutosEntity prod, Long id) {
-        listById(id);
-        prod.setNome_produto(prod.getNome_produto());
-        prod.setDescricao_produto(prod.getNome_produto());
-        prod.setValor_produto(prod.getValor_produto());
-        return prod;
+    public ProdutosEntity update(UpdateProdutosDTO prod, Long id) {
+        ProdutosEntity newObj = produtosRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("ID de produto não encontrado")
+        );
+        newObj.setNome_produto(prod.getNome_produto());
+        newObj.setDescricao_produto(prod.getNome_produto());
+        newObj.setValor_produto(prod.getValor_produto());
+        return newObj;
     }
 
     public void delete(Long id) {
         listById(id);
         try {
             produtosRepository.deleteById(id);
-        }catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             throw new RuntimeException("Produto não encontrado!");
         }
 

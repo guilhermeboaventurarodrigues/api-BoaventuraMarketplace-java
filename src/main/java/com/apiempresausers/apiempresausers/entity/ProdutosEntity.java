@@ -22,6 +22,8 @@ public class ProdutosEntity {
 
     private double valor_produto;
 
+    private boolean isOfferActive;
+
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "dono_produto_id", nullable = false)
