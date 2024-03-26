@@ -1,6 +1,7 @@
 package com.apiempresausers.apiempresausers.entity;
 
 import com.apiempresausers.apiempresausers.entity.enums.SegmentoClienteEnum;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
@@ -14,6 +15,7 @@ import java.util.List;
 @JsonPropertyOrder({"id",  "login", "password", "nome", "dataDeNascimento", "cpf", "segmentoCliente"})
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 public class ClienteEntity extends PessoaSuperClass{
     @Id
@@ -24,5 +26,5 @@ public class ClienteEntity extends PessoaSuperClass{
 
     @JsonManagedReference
     @OneToMany(mappedBy = "dono_produto_id")
-    private List<ProdutosEntity> produtos_anunciados = new ArrayList<ProdutosEntity>();
+    private List<ProdutosEntity> meus_produtos = new ArrayList<ProdutosEntity>();
 }

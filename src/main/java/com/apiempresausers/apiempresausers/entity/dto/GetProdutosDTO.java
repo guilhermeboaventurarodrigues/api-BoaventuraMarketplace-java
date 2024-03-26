@@ -10,6 +10,7 @@ public class GetProdutosDTO {
     private String descricao_produto;
     private double valor_produto;
     private Long dono_produto_id;
+    private boolean isOfferActive;
 
     public GetProdutosDTO(ProdutosEntity produto){
         this.id = produto.getId();
@@ -17,5 +18,6 @@ public class GetProdutosDTO {
         this.descricao_produto = produto.getDescricao_produto();
         this.valor_produto = produto.getValor_produto();
         this.dono_produto_id = produto.getDono_produto_id().getId();
+        this.isOfferActive = produto.isOfferActive();
     }
 }
