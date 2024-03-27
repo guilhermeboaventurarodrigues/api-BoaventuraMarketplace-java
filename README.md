@@ -4,7 +4,6 @@ Essa API está sendo desenvolvida em Java/SpringBoot com o Maven e usando o banc
 
 Depêndencias utilizadas: Spring Web, Spring Data JPA, Spring Boot DevTools, MySQL Driver.
 
-
 Sobre a ideia da aplição:
 
 Temos funcionarios, onde eles tem uma enumeração com 5 setores: RH, TI, FINANCEIRO, VENDAS E MARKETING.
