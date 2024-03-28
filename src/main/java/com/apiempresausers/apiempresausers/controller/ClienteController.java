@@ -2,6 +2,7 @@ package com.apiempresausers.apiempresausers.controller;
 
 import com.apiempresausers.apiempresausers.entity.ClienteEntity;
 import com.apiempresausers.apiempresausers.service.ClienteService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -44,5 +45,13 @@ public class ClienteController {
     ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         clienteService.delete(id);
         return ResponseEntity.status(204).build();
+    }
+
+    @PostMapping("/login")
+    ResponseEntity<Boolean> login(@RequestBody ClienteEntity cliente){
+        Boolean valid = clienteService.validarSenha(cliente);
+        if (!valid){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(valid);
+        } return ResponseEntity.status(HttpStatus.ACCEPTED).body(valid);
     }
 }

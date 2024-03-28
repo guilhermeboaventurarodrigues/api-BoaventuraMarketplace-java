@@ -49,4 +49,10 @@ public class ProdutosController {
         produtosService.delete(id);
         return ResponseEntity.status(204).build();
     }
+
+    @PutMapping("/anunciar/{id}")
+    ResponseEntity<GetProdutosDTO> anunciarProduto(@RequestBody SetProdutosDTO produto, @PathVariable("id") Long id){
+        GetProdutosDTO produtoAtualizado = produtosService.anunciarProdutos(produto, id);
+        return ResponseEntity.status(201).body(produtoAtualizado);
+    }
 }

@@ -56,4 +56,10 @@ public class ClienteService {
             throw new RuntimeException("Não foi possivel excluir pois não encontramos esse ID no nosso banco de dados!");
         }
     }
+
+    public Boolean validarSenha(ClienteEntity cliente){
+        String senha = clienteRepository.getById(cliente.getId()).getPassword();
+        Boolean valid = passwordEncoder.matches(cliente.getPassword(), senha);
+        return valid;
+    }
 }

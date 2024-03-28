@@ -1,13 +1,12 @@
 package com.apiempresausers.apiempresausers.service;
 
 import com.apiempresausers.apiempresausers.entity.ClienteEntity;
-import com.apiempresausers.apiempresausers.entity.PedidosEntity;
+import com.apiempresausers.apiempresausers.entity.TransacoesEntity;
 import com.apiempresausers.apiempresausers.entity.ProdutosEntity;
 import com.apiempresausers.apiempresausers.entity.dto.GetPedidosDTO;
 import com.apiempresausers.apiempresausers.entity.dto.SetPedidosDTO;
-import com.apiempresausers.apiempresausers.entity.dto.SetProdutosDTO;
 import com.apiempresausers.apiempresausers.repository.ClienteRepository;
-import com.apiempresausers.apiempresausers.repository.PedidosRepository;
+import com.apiempresausers.apiempresausers.repository.TransacoesRepository;
 import com.apiempresausers.apiempresausers.repository.ProdutosRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +16,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class PedidosService {
-    private PedidosRepository pedidosRepository;
+public class TransacoesService {
+    private TransacoesRepository transacoesRepository;
     private ProdutosRepository produtosRepository;
     private ClienteRepository clienteRepository;
 
     @Autowired
-    public PedidosService(PedidosRepository pedidosRepository, ProdutosRepository produtosRepository, ClienteRepository clienteRepository) {
-        this.pedidosRepository = pedidosRepository;
+    public TransacoesService(TransacoesRepository transacoesRepository, ProdutosRepository produtosRepository, ClienteRepository clienteRepository) {
+        this.transacoesRepository = transacoesRepository;
         this.produtosRepository = produtosRepository;
         this.clienteRepository = clienteRepository;
     }
-
 
     @Transactional
     public String comprarProduto(SetPedidosDTO produtoDTO) {
@@ -43,7 +41,7 @@ public class PedidosService {
         ClienteEntity antigoDonoProduto = clienteRepository.findById(produtoDTO.getAntigo_dono_produto_id())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado com o ID: " + produtoDTO.getAntigo_dono_produto_id()));
 
-        PedidosEntity pedido = new PedidosEntity();
+        TransacoesEntity pedido = new TransacoesEntity();
 
         pedido.setAntigo_dono_produto_id(antigoDonoProduto);
         pedido.setProduto(produto);
@@ -52,16 +50,16 @@ public class PedidosService {
         produto.setDono_produto_id(novoDonoProduto);
         produto.setOfferActive(false);
 
-        pedidosRepository.save(pedido);
+        transacoesRepository.save(pedido);
 
         return "Produto comprado";
     }
 
     public List<GetPedidosDTO> listarTransacoes() {
-        List<PedidosEntity> pedidos = pedidosRepository.findAll();
+        List<TransacoesEntity> pedidos = transacoesRepository.findAll();
 
         List<GetPedidosDTO> pedidosDTOList = new ArrayList<>();
-        for (PedidosEntity pedido : pedidos) {
+        for (TransacoesEntity pedido : pedidos) {
             GetPedidosDTO pedidoDTO = new GetPedidosDTO();
 
             //Informações sobre o pedido
@@ -69,26 +67,26 @@ public class PedidosService {
             pedidoDTO.setData_pedido(pedido.getData_pedido().getTime());
 
             //Informações sobre o antigo dono
-            ClienteEntity antigoDonoDTO = new ClienteEntity();
-            antigoDonoDTO.setId(pedido.getAntigo_dono_produto_id().getId());
-            antigoDonoDTO.setLogin(pedido.getAntigo_dono_produto_id().getLogin());
+            ClienteEntity clienteEntity = new ClienteEntity();
+            clienteEntity.setId(pedido.getAntigo_dono_produto_id().getId());
+            clienteEntity.setLogin(pedido.getAntigo_dono_produto_id().getLogin());
 
-            pedidoDTO.setAntigo_dono_produto(antigoDonoDTO);
+            pedidoDTO.setAntigo_dono_produto(clienteEntity);
 
             //Informações sobre o produto
-            ProdutosEntity produtoDTO = new ProdutosEntity();
-            produtoDTO.setId(pedido.getProduto().getId());
-            produtoDTO.setNome_produto(pedido.getProduto().getNome_produto());
-            produtoDTO.setValor_produto(pedido.getProduto().getValor_produto());
+            ProdutosEntity produtosEntity = new ProdutosEntity();
+            produtosEntity.setId(pedido.getProduto().getId());
+            produtosEntity.setNome_produto(pedido.getProduto().getNome_produto());
+            produtosEntity.setValor_produto(pedido.getProduto().getValor_produto());
 
-            pedidoDTO.setProduto(produtoDTO);
+            pedidoDTO.setProduto(produtosEntity);
 
             //Informações sobre o novo dono
-            ClienteEntity novoDonoDTO = new ClienteEntity();
-            novoDonoDTO.setId(pedido.getNovo_dono_produto_id().getId());
-            novoDonoDTO.setLogin(pedido.getNovo_dono_produto_id().getLogin());
+            ClienteEntity clienteEntity1 = new ClienteEntity();
+            clienteEntity1.setId(pedido.getNovo_dono_produto_id().getId());
+            clienteEntity1.setLogin(pedido.getNovo_dono_produto_id().getLogin());
 
-            pedidoDTO.setNovo_dono_produto(novoDonoDTO);
+            pedidoDTO.setNovo_dono_produto(clienteEntity1);
 
             pedidosDTOList.add(pedidoDTO);
         }

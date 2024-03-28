@@ -81,4 +81,14 @@ public class ProdutosService {
         }
 
     }
+
+    @Transactional
+    public GetProdutosDTO anunciarProdutos(SetProdutosDTO produto, Long id){
+        ProdutosEntity newObj = produtosRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("ID de produto não encontrado")
+        );
+        newObj.setOfferActive(produto.isOfferActive());
+        produtosRepository.save(newObj);
+        return new GetProdutosDTO(newObj);
+    }
 }

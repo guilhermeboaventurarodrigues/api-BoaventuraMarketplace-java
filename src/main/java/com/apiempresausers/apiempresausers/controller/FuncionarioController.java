@@ -49,10 +49,10 @@ public class FuncionarioController {
     }
 
     @PostMapping("/login")
-    ResponseEntity<FuncionarioEntity> validarSenha(@RequestBody FuncionarioEntity func){
+    ResponseEntity<Boolean> validarSenha(@RequestBody FuncionarioEntity func){
         Boolean valid = funcionarioService.validarSenha(func);
         if (!valid){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        } return ResponseEntity.status(200).build();
+        } return ResponseEntity.status(200).body(valid);
     }
 }

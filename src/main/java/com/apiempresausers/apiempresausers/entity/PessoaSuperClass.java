@@ -12,18 +12,27 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PessoaSuperClass {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @NotNull
     @NotEmpty
     private String nome;
+
     @NotNull
     @NotEmpty
     private String dataDeNascimento;
+
     @NotNull
     @NotEmpty
     private String cpf;
+
     @NotNull
     @NotEmpty
     private String login;
+
     @NotNull
     @NotEmpty
     private String password;
