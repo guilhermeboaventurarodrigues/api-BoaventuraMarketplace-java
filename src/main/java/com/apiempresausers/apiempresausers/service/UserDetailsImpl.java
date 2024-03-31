@@ -10,12 +10,14 @@ import java.util.Collection;
 
 public class UserDetailsImpl implements UserDetails {
 
+    private Long id;
     private String name;
     private String username;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(String name, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImpl(Long id, String name, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+        this.id = id;
         this.name = name;
         this.username = username;
         this.password = password;
@@ -23,12 +25,16 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public static UserDetailsImpl build(ClienteEntity cliente){
-        return new UserDetailsImpl(cliente.getNome(), cliente.getLogin(), cliente.getPassword(), new ArrayList<>());
+        return new UserDetailsImpl(cliente.getId(), cliente.getNome(), cliente.getLogin(), cliente.getPassword(), new ArrayList<>());
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     @Override

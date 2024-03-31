@@ -8,6 +8,8 @@ import com.apiempresausers.apiempresausers.entity.dto.UpdateProdutosDTO;
 import com.apiempresausers.apiempresausers.repository.ProdutosRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,7 +35,11 @@ public class ProdutosService {
         produtosEntity.setValor_produto(prod.getValor_produto());
         produtosEntity.setOfferActive(prod.isOfferActive());
 
-        ClienteEntity donoProduto = clienteService.listById(prod.getDono_produto_id());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Long userId = userDetails.getId();
+
+        ClienteEntity donoProduto = clienteService.listById(userId);
         produtosEntity.setDono_produto_id(donoProduto);
 
         return this.produtosRepository.save(produtosEntity);
@@ -54,18 +60,15 @@ public class ProdutosService {
     }
 
     public GetProdutosDTO listById(Long id) {
-        ProdutosEntity listed = produtosRepository.findById(id).orElseThrow(() -> new RuntimeException(
-                "ID de produto não encontrado"
-        ));
-
+        ProdutosEntity listed = produtosRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("ID de produto não encontrado"));
         return new GetProdutosDTO(listed);
     }
 
     @Transactional
     public ProdutosEntity update(UpdateProdutosDTO prod, Long id) {
-        ProdutosEntity newObj = produtosRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("ID de produto não encontrado")
-        );
+        ProdutosEntity newObj = produtosRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("ID de produto não encontrado"));
         newObj.setNome_produto(prod.getNome_produto());
         newObj.setDescricao_produto(prod.getNome_produto());
         newObj.setValor_produto(prod.getValor_produto());
@@ -84,9 +87,8 @@ public class ProdutosService {
 
     @Transactional
     public GetProdutosDTO anunciarProdutos(SetProdutosDTO produto, Long id){
-        ProdutosEntity newObj = produtosRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("ID de produto não encontrado")
-        );
+        ProdutosEntity newObj = produtosRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("ID de produto não encontrado"));
         newObj.setOfferActive(produto.isOfferActive());
         produtosRepository.save(newObj);
         return new GetProdutosDTO(newObj);

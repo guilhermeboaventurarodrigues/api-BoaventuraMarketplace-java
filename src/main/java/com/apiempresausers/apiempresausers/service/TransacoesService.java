@@ -10,6 +10,8 @@ import com.apiempresausers.apiempresausers.repository.TransacoesRepository;
 import com.apiempresausers.apiempresausers.repository.ProdutosRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -35,10 +37,14 @@ public class TransacoesService {
 
         if (!produto.isOfferActive()) throw new RuntimeException("Esse produto não está a venda");
 
-        ClienteEntity novoDonoProduto = clienteRepository.findById(produtoDTO.getNovo_dono_produto_id())
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado com o ID: " + produtoDTO.getNovo_dono_produto_id()));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Long userId = userDetails.getId();
 
-        ClienteEntity antigoDonoProduto = clienteRepository.findById(produtoDTO.getAntigo_dono_produto_id())
+        ClienteEntity novoDonoProduto = clienteRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado com o ID: " + userId));
+
+        ClienteEntity antigoDonoProduto = clienteRepository.findById(produto.getDono_produto_id().getId())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado com o ID: " + produtoDTO.getAntigo_dono_produto_id()));
 
         TransacoesEntity pedido = new TransacoesEntity();
