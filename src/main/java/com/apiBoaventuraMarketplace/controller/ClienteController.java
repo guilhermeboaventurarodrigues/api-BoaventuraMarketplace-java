@@ -19,7 +19,7 @@ public class ClienteController {
     }
 
     @PostMapping("/create")
-    ResponseEntity<ClienteEntity> create(@RequestBody ClienteEntity cliente) {
+   public ResponseEntity<ClienteEntity> create(@RequestBody ClienteEntity cliente) {
         return ResponseEntity.status(201).body(clienteService.create(cliente));
     }
 
