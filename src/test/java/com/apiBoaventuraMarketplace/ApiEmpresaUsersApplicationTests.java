@@ -4,10 +4,12 @@ import com.apiBoaventuraMarketplace.controller.ClienteController;
 import com.apiBoaventuraMarketplace.controller.ProdutosController;
 import com.apiBoaventuraMarketplace.entity.ClienteEntity;
 import com.apiBoaventuraMarketplace.entity.ProdutosEntity;
+import com.apiBoaventuraMarketplace.entity.TransacoesEntity;
 import com.apiBoaventuraMarketplace.entity.dto.SetProdutosDTO;
 import com.apiBoaventuraMarketplace.entity.enums.SegmentoClienteEnum;
 import com.apiBoaventuraMarketplace.repository.ClienteRepository;
 import com.apiBoaventuraMarketplace.repository.ProdutosRepository;
+import com.apiBoaventuraMarketplace.repository.TransacoesRepository;
 import com.apiBoaventuraMarketplace.service.ClienteService;
 import com.apiBoaventuraMarketplace.service.ProdutosService;
 import com.apiBoaventuraMarketplace.service.UserDetailsImpl;
@@ -20,6 +22,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.TestPropertySource;
+
+import java.util.Date;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -206,5 +210,67 @@ class CriarProdutoTeste {
         assertThat(http.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(http.getBody()).isNotNull();
         assertThat(http.getBody().getNome_produto()).isEqualTo(produtosEntity.getNome_produto());
+    }
+}
+
+@SpringBootTest
+@TestPropertySource(locations = "classpath:application-test.properties")
+class CriarTransacoesTeste {
+    @Autowired
+    private TransacoesRepository transacoesRepository;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+
+    @Autowired
+    private ProdutosRepository produtosRepository;
+
+    ClienteEntity clienteEntity1 = new ClienteEntity();
+    ClienteEntity clienteEntity2 = new ClienteEntity();
+    ProdutosEntity produtosEntity = new ProdutosEntity();
+
+    @BeforeEach
+    public void setup() {
+        clienteEntity1.setNome("Guilherme");
+        clienteEntity1.setCpf("12345678910");
+        clienteEntity1.setDataDeNascimento("2000-10-01");
+        clienteEntity1.setLogin("guilherme");
+        clienteEntity1.setPassword("123456");
+        clienteEntity1.setSegmentoCliente(SegmentoClienteEnum.COMPRADOR);
+
+        clienteEntity2.setNome("Ana");
+        clienteEntity2.setCpf("12345678910");
+        clienteEntity2.setDataDeNascimento("2000-10-01");
+        clienteEntity2.setLogin("ana");
+        clienteEntity2.setPassword("123456");
+        clienteEntity2.setSegmentoCliente(SegmentoClienteEnum.VENDEDOR);
+
+        produtosEntity.setNome_produto("Computador");
+        produtosEntity.setDescricao_produto("Computador descrição");
+        produtosEntity.setValor_produto(1000.00);
+        produtosEntity.setOfferActive(true);
+    }
+
+    @Test
+    @DisplayName("Testando repository de criação de transações")
+    void criarTransacoesRepository() {
+        ClienteEntity clienteEntitySaved1 = clienteRepository.save(clienteEntity1);
+        ClienteEntity clienteEntitySaved2 = clienteRepository.save(clienteEntity2);
+        produtosEntity.setDono_produto_id(clienteEntitySaved1);
+        ProdutosEntity produtosEntitySaved1 = produtosRepository.save(produtosEntity);
+
+        TransacoesEntity transacoesEntity = new TransacoesEntity();
+        transacoesEntity.setAntigo_dono_produto_id(clienteEntitySaved1);
+        transacoesEntity.setProduto(produtosEntitySaved1);
+        transacoesEntity.setNovo_dono_produto_id(clienteEntitySaved2);
+        transacoesEntity.setData_pedido(new Date());
+        TransacoesEntity transacoesSaved = transacoesRepository.save(transacoesEntity);
+        System.out.println(transacoesSaved);
+        assertThat(transacoesSaved).isNotNull();
+        assertThat(transacoesSaved.getId()).isNotNull();
+        assertThat(transacoesSaved.getAntigo_dono_produto_id().getLogin()).isEqualTo(clienteEntitySaved1.getLogin());
+        assertThat(transacoesSaved.getNovo_dono_produto_id().getLogin()).isEqualTo(clienteEntitySaved2.getLogin());
+        assertThat(transacoesSaved.getProduto().getNome_produto()).isEqualTo(produtosEntitySaved1.getNome_produto());
+        assertThat(transacoesSaved.getData_pedido()).isEqualTo(transacoesEntity.getData_pedido());
     }
 }
