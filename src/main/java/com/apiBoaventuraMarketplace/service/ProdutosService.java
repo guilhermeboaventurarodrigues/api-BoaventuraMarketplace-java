@@ -27,6 +27,16 @@ public class ProdutosService {
         this.produtosRepository = produtosRepository;
     }
 
+
+    public SetProdutosDTO convertEntityTODTO(ProdutosEntity entity) {
+        SetProdutosDTO dto = new SetProdutosDTO();
+        dto.setId(entity.getId());
+        dto.setNome_produto(entity.getNome_produto());
+        dto.setDescricao_produto(entity.getDescricao_produto());
+        dto.setValor_produto(entity.getValor_produto());
+        dto.setOfferActive(entity.isOfferActive());
+        return dto;
+    }
     @Transactional
     public ProdutosEntity create(SetProdutosDTO prod) {
         ProdutosEntity produtosEntity = new ProdutosEntity();
