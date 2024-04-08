@@ -20,7 +20,7 @@ public class TransacoesController {
 
     @PostMapping("/comprar")
     public ResponseEntity<String> comprarProduto(@RequestBody SetPedidosDTO pedidos) {
-        return ResponseEntity.status(200).body(transacoesService.comprarProduto(pedidos));
+        return ResponseEntity.status(201).body(transacoesService.comprarProduto(pedidos));
     }
 
     @GetMapping("/listar")

@@ -2,9 +2,11 @@ package com.apiBoaventuraMarketplace;
 
 import com.apiBoaventuraMarketplace.controller.ClienteController;
 import com.apiBoaventuraMarketplace.controller.ProdutosController;
+import com.apiBoaventuraMarketplace.controller.TransacoesController;
 import com.apiBoaventuraMarketplace.entity.ClienteEntity;
 import com.apiBoaventuraMarketplace.entity.ProdutosEntity;
 import com.apiBoaventuraMarketplace.entity.TransacoesEntity;
+import com.apiBoaventuraMarketplace.entity.dto.SetPedidosDTO;
 import com.apiBoaventuraMarketplace.entity.dto.SetProdutosDTO;
 import com.apiBoaventuraMarketplace.entity.enums.SegmentoClienteEnum;
 import com.apiBoaventuraMarketplace.repository.ClienteRepository;
@@ -12,6 +14,7 @@ import com.apiBoaventuraMarketplace.repository.ProdutosRepository;
 import com.apiBoaventuraMarketplace.repository.TransacoesRepository;
 import com.apiBoaventuraMarketplace.service.ClienteService;
 import com.apiBoaventuraMarketplace.service.ProdutosService;
+import com.apiBoaventuraMarketplace.service.TransacoesService;
 import com.apiBoaventuraMarketplace.service.UserDetailsImpl;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
@@ -213,11 +216,18 @@ class CriarProdutoTeste {
     }
 }
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
 class CriarTransacoesTeste {
     @Autowired
     private TransacoesRepository transacoesRepository;
+
+    @Autowired
+    private TransacoesService transacoesService;
+
+    @Autowired
+    private TransacoesController transacoesController;
 
     @Autowired
     private ClienteRepository clienteRepository;
@@ -252,6 +262,7 @@ class CriarTransacoesTeste {
     }
 
     @Test
+    @Order(1)
     @DisplayName("Testando repository de criação de transações")
     void criarTransacoesRepository() {
         ClienteEntity clienteEntitySaved1 = clienteRepository.save(clienteEntity1);
@@ -272,5 +283,67 @@ class CriarTransacoesTeste {
         assertThat(transacoesSaved.getNovo_dono_produto_id().getLogin()).isEqualTo(clienteEntitySaved2.getLogin());
         assertThat(transacoesSaved.getProduto().getNome_produto()).isEqualTo(produtosEntitySaved1.getNome_produto());
         assertThat(transacoesSaved.getData_pedido()).isEqualTo(transacoesEntity.getData_pedido());
+    }
+
+    @Test
+    @Order(2)
+    @DisplayName("Testando service de criação de transações")
+    void criarTransacoesService() {
+        ClienteEntity clienteEntitySaved1 = clienteRepository.save(clienteEntity1);
+        ClienteEntity clienteEntitySaved2 = clienteRepository.save(clienteEntity2);
+        produtosEntity.setDono_produto_id(clienteEntitySaved1);
+        ProdutosEntity produtosEntitySaved1 = produtosRepository.save(produtosEntity);
+
+        // Simulando o UserDetails do usuário autenticado
+        UserDetailsImpl userDetails = UserDetailsImpl.build(clienteEntitySaved2); // Criando uma instância UserDetailsImpl com o cliente criado
+
+        // Simulando a autenticação do usuário
+        UsernamePasswordAuthenticationToken auth = Mockito.mock(UsernamePasswordAuthenticationToken.class);
+        Mockito.when(auth.getPrincipal()).thenReturn(userDetails);
+
+        // Configurando o contexto de segurança com a autenticação simulada
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        SetPedidosDTO transacoesEntity = new SetPedidosDTO();
+        transacoesEntity.setAntigo_dono_produto_id(clienteEntitySaved1.getId());
+        transacoesEntity.setProduto_id(produtosEntitySaved1.getId());
+        transacoesEntity.setNovo_dono_produto_id(clienteEntitySaved2.getId());
+
+        String transacoesSaved = transacoesService.comprarProduto(transacoesEntity);
+
+        assertThat(transacoesSaved).isNotNull();
+        assertThat(transacoesSaved).isEqualTo("Produto comprado");
+    }
+
+    @Test
+    @Order(3)
+    @DisplayName("Testando controller de criação de transações")
+    void criarTransacoesController() {
+        ClienteEntity clienteEntitySaved1 = clienteRepository.save(clienteEntity1);
+        ClienteEntity clienteEntitySaved2 = clienteRepository.save(clienteEntity2);
+        produtosEntity.setDono_produto_id(clienteEntitySaved1);
+        ProdutosEntity produtosEntitySaved1 = produtosRepository.save(produtosEntity);
+
+        // Simulando o UserDetails do usuário autenticado
+        UserDetailsImpl userDetails = UserDetailsImpl.build(clienteEntitySaved2); // Criando uma instância UserDetailsImpl com o cliente criado
+
+        // Simulando a autenticação do usuário
+        UsernamePasswordAuthenticationToken auth = Mockito.mock(UsernamePasswordAuthenticationToken.class);
+        Mockito.when(auth.getPrincipal()).thenReturn(userDetails);
+
+        // Configurando o contexto de segurança com a autenticação simulada
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        SetPedidosDTO transacoesEntity = new SetPedidosDTO();
+        transacoesEntity.setAntigo_dono_produto_id(clienteEntitySaved1.getId());
+        transacoesEntity.setProduto_id(produtosEntitySaved1.getId());
+        transacoesEntity.setNovo_dono_produto_id(clienteEntitySaved2.getId());
+
+        ResponseEntity<String> http = transacoesController.comprarProduto(transacoesEntity);
+
+        assertThat(http).isNotNull();
+        assertThat(http.getBody()).isEqualTo("Produto comprado");
+        assertThat(http.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(http.getHeaders()).isNotNull();
     }
 }
