@@ -7,6 +7,7 @@ import com.apiBoaventuraMarketplace.repository.ProdutosRepository;
 import com.apiBoaventuraMarketplace.entity.ClienteEntity;
 import com.apiBoaventuraMarketplace.entity.ProdutosEntity;
 import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,24 +27,11 @@ public class ProdutosService {
     public ProdutosService(ProdutosRepository produtosRepository) {
         this.produtosRepository = produtosRepository;
     }
+    ModelMapper modelMapper = new ModelMapper();
 
-
-    public SetProdutosDTO convertEntityTODTO(ProdutosEntity entity) {
-        SetProdutosDTO dto = new SetProdutosDTO();
-        dto.setId(entity.getId());
-        dto.setNome_produto(entity.getNome_produto());
-        dto.setDescricao_produto(entity.getDescricao_produto());
-        dto.setValor_produto(entity.getValor_produto());
-        dto.setOfferActive(entity.isOfferActive());
-        return dto;
-    }
     @Transactional
     public ProdutosEntity create(SetProdutosDTO prod) {
-        ProdutosEntity produtosEntity = new ProdutosEntity();
-        produtosEntity.setNome_produto(prod.getNome_produto());
-        produtosEntity.setDescricao_produto(prod.getDescricao_produto());
-        produtosEntity.setValor_produto(prod.getValor_produto());
-        produtosEntity.setOfferActive(prod.isOfferActive());
+        ProdutosEntity produtosEntity = modelMapper.map(prod, ProdutosEntity.class);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
@@ -54,7 +42,6 @@ public class ProdutosService {
 
         return this.produtosRepository.save(produtosEntity);
     }
-
 
     public List<GetProdutosDTO> listAll() {
         List<ProdutosEntity> produtosEntities = produtosRepository.findAll();

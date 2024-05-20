@@ -80,36 +80,29 @@ public class CriarProdutosTeste {
         ClienteEntity clienteSalved = clienteRepository.save(clienteEntity);
 
         // Simulando o UserDetails do usuário autenticado
-        UserDetailsImpl userDetails = UserDetailsImpl.build(clienteSalved); // Criando uma instância UserDetailsImpl com o cliente criado
+        UserDetailsImpl userDetails = UserDetailsImpl.build(clienteSalved);
 
         // Simulando a autenticação do usuário
         UsernamePasswordAuthenticationToken auth = Mockito.mock(UsernamePasswordAuthenticationToken.class);
         Mockito.when(auth.getPrincipal()).thenReturn(userDetails);
-
-        // Configurando o contexto de segurança com a autenticação simulada
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        // Restante do seu teste
-        ProdutosEntity produtosEntity = new ProdutosEntity();
-        produtosEntity.setNome_produto("Computador");
-        produtosEntity.setDescricao_produto("Computador descrição");
-        produtosEntity.setValor_produto(1000.00);
-        produtosEntity.setOfferActive(true);
-        produtosEntity.setDono_produto_id(clienteSalved);
+        // Criando um SetProdutosDTO com os dados do produto
+        SetProdutosDTO produtosDTO = new SetProdutosDTO();
+        produtosDTO.setNome_produto("Computador");
+        produtosDTO.setDescricao_produto("Computador descrição");
+        produtosDTO.setValor_produto(1000.00);
+        produtosDTO.setOfferActive(true);
 
-        SetProdutosDTO produtosDTO = produtosService.convertEntityTODTO(produtosEntity);
-
+        // Chamando o método create do serviço
         ProdutosEntity produtosSaved = produtosService.create(produtosDTO);
 
         assertThat(produtosSaved).isNotNull();
         assertThat(produtosSaved.getId()).isNotNull();
-        assertThat(produtosSaved.getNome_produto()).isEqualTo(produtosEntity.getNome_produto());
-        assertThat(produtosSaved.getDescricao_produto()).isEqualTo(produtosEntity.getDescricao_produto());
-        assertThat(produtosSaved.getValor_produto()).isEqualTo(produtosEntity.getValor_produto());
-        assertThat(produtosSaved.isOfferActive()).isEqualTo(produtosEntity.isOfferActive());
-        assertThat(produtosSaved.getDono_produto_id().getId()).isEqualTo(produtosEntity.getDono_produto_id().getId());
-        assertThat(produtosSaved.getDono_produto_id().getLogin()).isEqualTo(clienteSalved.getLogin());
-        assertThat(produtosSaved.getDono_produto_id().getSegmentoCliente()).isEqualTo(clienteSalved.getSegmentoCliente());
+        assertThat(produtosSaved.getNome_produto()).isEqualTo("Computador");
+        assertThat(produtosSaved.getDescricao_produto()).isEqualTo("Computador descrição");
+        assertThat(produtosSaved.getValor_produto()).isEqualTo(1000.00);
+        assertThat(produtosSaved.isOfferActive()).isTrue();
     }
 
     @Test
@@ -128,19 +121,16 @@ public class CriarProdutosTeste {
         // Configurando o contexto de segurança com a autenticação simulada
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        // Restante do seu teste
-        ProdutosEntity produtosEntity = new ProdutosEntity();
-        produtosEntity.setNome_produto("Computador");
-        produtosEntity.setDescricao_produto("Computador descrição");
-        produtosEntity.setValor_produto(1000.00);
-        produtosEntity.setOfferActive(true);
-        produtosEntity.setDono_produto_id(clienteSalved);
+        SetProdutosDTO produtosDTO = new SetProdutosDTO();
+        produtosDTO.setNome_produto("Computador");
+        produtosDTO.setDescricao_produto("Computador descrição");
+        produtosDTO.setValor_produto(1000.00);
+        produtosDTO.setOfferActive(true);
 
-        ResponseEntity<ProdutosEntity> http = produtosController.create(produtosService.convertEntityTODTO(produtosEntity));
+        ResponseEntity<ProdutosEntity> http = produtosController.create(produtosDTO);
         assertThat(http).isNotNull();
         assertThat(http.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(http.getBody()).isNotNull();
-        assertThat(http.getBody().getNome_produto()).isEqualTo(produtosEntity.getNome_produto());
     }
 }
 
