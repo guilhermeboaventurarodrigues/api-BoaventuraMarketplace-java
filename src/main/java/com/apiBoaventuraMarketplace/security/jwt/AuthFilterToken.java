@@ -16,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 public class AuthFilterToken extends OncePerRequestFilter {
+
     @Autowired
     private JwtUtils jwtUtils;
 
@@ -24,27 +25,32 @@ public class AuthFilterToken extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        try{
+        try {
             String jwt = getToken(request);
-            if(jwt != null & jwtUtils.validateJwtToken(jwt)){
-                String username = jwtUtils.getUsernameToken(jwt);
-                UserDetails userDetails = userDetailService.loadUserByUsername(username);
-                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            if (jwt != null) {
+                System.out.println("Token JWT: " + jwt); // Log do token para verificação
+                if (jwtUtils.validateJwtToken(jwt)) {
+                    String username = jwtUtils.getUsernameToken(jwt);
+                    UserDetails userDetails = userDetailService.loadUserByUsername(username);
+                    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                SecurityContextHolder.getContext().setAuthentication(auth);
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                } else {
+                    System.out.println("Token inválido ou expirado"); // Log se o token for inválido
+                }
             }
-        }catch(Exception e){
-            System.out.println("Ocorreu um errro ao processar o token");
+        } catch (Exception e) {
+            System.err.println("Ocorreu um erro ao processar o token: " + e.getMessage());
         }
 
         filterChain.doFilter(request, response);
     }
 
-    private String getToken(HttpServletRequest request){
+    private String getToken(HttpServletRequest request) {
         String headerToken = request.getHeader("Authorization");
-        if(StringUtils.hasText(headerToken) && headerToken.startsWith("Bearer")){
-            return headerToken.replace("Bearer ", "");
+        if (StringUtils.hasText(headerToken) && headerToken.startsWith("Bearer ")) {
+            return headerToken.substring(7);
         }
         return null;
     }

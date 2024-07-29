@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.UniqueElements;
 
 @MappedSuperclass
 @Data
@@ -31,6 +32,7 @@ public class PessoaSuperClass {
 
     @NotNull
     @NotEmpty
+    @Column(unique = true)
     private String login;
 
     @NotNull
