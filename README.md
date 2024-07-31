@@ -18,6 +18,7 @@ $ docker compose up --build
 
 ## Funçoes já programadas:
  - Criar clientes
+ - Login com token JWT
  - Adicionar produtos
  - Anunciar produtos
  - Comprar produtos
