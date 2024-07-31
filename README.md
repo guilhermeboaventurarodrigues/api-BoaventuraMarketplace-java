@@ -1,4 +1,4 @@
-<h1 align="center">Api simulando um marketplace, desenvolvida em Java/SpringBoot, banco de dados MySQL e deploy feito em containers docker. </h1>
+<h1 align="center">Api simulando um marketplace, desenvolvida em Java/SpringBoot, MySQL, Junit e deploy feito em containers docker. </h1>
 
 <p align="center">
 <img src="http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge"/>
