@@ -9,8 +9,5 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
-# Copie o arquivo .env para o container
-COPY .env .env
-
 # Comando para rodar a aplicação
 ENTRYPOINT ["java", "-jar", "app.jar"]
