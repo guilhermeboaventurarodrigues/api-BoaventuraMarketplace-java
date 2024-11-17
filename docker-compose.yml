@@ -20,7 +20,7 @@ services:
       dockerfile: Dockerfile
     container_name: api-marketplace-java
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-marketplace:3306/usersdb
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-marketplace:3306/usersdb?createDatabaseIfNotExists=true
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: userpassword
     ports:
