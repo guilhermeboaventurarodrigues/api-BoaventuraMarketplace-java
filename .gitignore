@@ -1,3 +1,5 @@
+mvnw
+mvnw.cmd
 .mvn/wrapper
 mvn*
 .env
