@@ -1,34 +1,62 @@
-<h1 align="center">Api simulando um marketplace, desenvolvida em Java/SpringBoot, MySQL, Junit e deploy feito em containers docker. </h1>
+# API BoaventuraMarketplace
 
-<p align="center">
-<img src="http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge"/>
-</p>
+**Esse projeto foi criado com o intuito de colocar todos meus conhecimentos em Java/SpringBoot na prática.**
 
-## 🛠️ Abrir e rodar o projeto
+---
+
+## Funcionalidades
+
+- **Cadastro de usuários**
+- **Login de usuarios com token JWT**
+- **Cadastro de produtos**
+- **Compra de produtos**
+- **Log das transações**
+---
+
+## Tecnologias Usadas
+
+- **Backend**: Java, Spring Boot, SpringSecurity
+- **Banco de Dados**: MySQL
+- **Containerização**: Docker e Kubernetes
+- **Autenticação**: JWT
+- **Testes**: JUnit
+- **CI/CD**: GitHub Actions para automação de build, testes e deploy
+
+---
+
+## Como Rodar Localmente
+
+### 1. **Pré-requisitos**
+
+Antes de rodar o projeto, verifique se você tem as seguintes ferramentas instaladas:
+
+- **Docker**: [Instalar Docker](https://www.docker.com/get-started)
+- **Docker Compose**: [Instalar Docker Compose](https://docs.docker.com/compose/install/)
+- **Java 17**: [Instalar OpenJDK 17](https://adoptopenjdk.net/)
+
+### 2. **Clone o repositório**
+
 ```bash
-# Clone este repositório
-$ git clone https://github.com/guilhermeboaventurarodrigues/api-BoaventuraMarketplace-java.git
-
-# Instale as dependencias maven
-$ mvn clean install
-
-# Execute a aplicação no docker
-$ docker compose up --build
+git clone https://github.com/guilhermeboaventurarodrigues/api-BoaventuraMarketplace-java.git
+cd api-BoaventuraMarketplace-java
 ```
 
-## Funçoes já programadas:
- - Criar clientes
- - Login com token JWT
- - Adicionar produtos
- - Anunciar produtos
- - Comprar produtos
+### 3. **Configurar variáveis de ambiente**
 
-## Tecnologias utilizadas:
- - SpringBoot 
- - MySQL
- - Hibernate
- - JWT
- - Junit
- - Docker
+Crie um arquivo `.env` na raiz do projeto e configure as seguintes variáveis de ambiente:
 
+```bash
+# Configurações do banco de dados
+SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/seu-banco
+SPRING_DATASOURCE_USERNAME=usuario
+SPRING_DATASOURCE_PASSWORD=senha
 
+# Configurações de JWT
+jwt.secret=seu-segredo
+jwt.expiration=3600000
+```
+### 4. **Rodar com o Docker Compose**
+
+```bash
+docker-compose up --build
+```
