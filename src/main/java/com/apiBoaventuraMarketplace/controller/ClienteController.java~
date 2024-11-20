@@ -1,7 +1,6 @@
 package com.apiBoaventuraMarketplace.controller;
 
 import com.apiBoaventuraMarketplace.entity.ClienteEntity;
-import com.apiBoaventuraMarketplace.entity.dto.LoginRequest;
 import com.apiBoaventuraMarketplace.service.ClienteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +46,7 @@ public class ClienteController {
     }
 
     @PostMapping("/login")
-    ResponseEntity<Boolean> login(@RequestBody LoginRequest cliente){
+    ResponseEntity<Boolean> login(@RequestBody ClienteEntity cliente){
         Boolean valid = clienteService.validarSenha(cliente);
         if (!valid){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(valid);

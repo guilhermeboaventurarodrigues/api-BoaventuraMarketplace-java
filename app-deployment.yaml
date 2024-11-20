@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: api-marketplace-java
-          image: n4kgod/api-boaventuramarketplace-java-app:latest # Imagem no Docker Hub ou outro repositório
+          image: n4kgod/api-boaventuramarketplace-java-app:latest
           ports:
             - containerPort: 8080
           env:

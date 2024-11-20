@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class AcessDTO {
+public class AuthResponse {
     private String token;
-
-    //TODO implementar retornar o usuario e liberações (authorities)
+    private String mensagem;
+    private Boolean sucesso;
 }

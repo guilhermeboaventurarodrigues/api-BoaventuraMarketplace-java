@@ -38,11 +38,10 @@ public class TransacoesService {
         if (!produto.isOfferActive()) throw new RuntimeException("Esse produto não está a venda");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        Long userId = userDetails.getId();
+        String userLogin = authentication.getName();
 
-        ClienteEntity novoDonoProduto = clienteRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado com o ID: " + userId));
+        ClienteEntity novoDonoProduto = clienteRepository.findByLogin(userLogin)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado com o ID: "));
 
         ClienteEntity antigoDonoProduto = clienteRepository.findById(produto.getDono_produto_id().getId())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado com o ID: " + produtoDTO.getAntigo_dono_produto_id()));

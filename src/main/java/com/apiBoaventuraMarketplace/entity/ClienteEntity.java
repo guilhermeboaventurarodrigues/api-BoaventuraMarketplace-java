@@ -3,8 +3,9 @@ package com.apiBoaventuraMarketplace.entity;
 import com.apiBoaventuraMarketplace.entity.enums.SegmentoClienteEnum;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -12,17 +13,37 @@ import java.util.List;
 
 @Entity
 @Table(name="clientes")
-@JsonPropertyOrder({"id",  "login", "password", "nome", "dataDeNascimento", "cpf", "segmentoCliente"})
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-public class ClienteEntity extends PessoaSuperClass{
+public class ClienteEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
+    @NotEmpty
+    private String nome;
+
+    @NotNull
+    @NotEmpty
+    private String dataDeNascimento;
+
+    @NotNull
+    @NotEmpty
+    private String cpf;
+
     private SegmentoClienteEnum segmentoCliente;
+
+    @NotNull
+    @NotEmpty
+    @Column(unique = true)
+    private String login;
+
+    @NotNull
+    @NotEmpty
+    private String password;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "dono_produto_id")

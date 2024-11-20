@@ -3,6 +3,7 @@ package com.apiBoaventuraMarketplace.service;
 import com.apiBoaventuraMarketplace.entity.dto.GetProdutosDTO;
 import com.apiBoaventuraMarketplace.entity.dto.SetProdutosDTO;
 import com.apiBoaventuraMarketplace.entity.dto.UpdateProdutosDTO;
+import com.apiBoaventuraMarketplace.repository.ClienteRepository;
 import com.apiBoaventuraMarketplace.repository.ProdutosRepository;
 import com.apiBoaventuraMarketplace.entity.ClienteEntity;
 import com.apiBoaventuraMarketplace.entity.ProdutosEntity;
@@ -22,7 +23,7 @@ public class ProdutosService {
     private ProdutosRepository produtosRepository;
 
     @Autowired
-    private ClienteService clienteService;
+    private ClienteRepository clienteRepository;
 
     public ProdutosService(ProdutosRepository produtosRepository) {
         this.produtosRepository = produtosRepository;
@@ -34,10 +35,11 @@ public class ProdutosService {
         ProdutosEntity produtosEntity = modelMapper.map(prod, ProdutosEntity.class);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        Long userId = userDetails.getId();
+        String userLogin = authentication.getName();
 
-        ClienteEntity donoProduto = clienteService.listById(userId);
+        ClienteEntity donoProduto = clienteRepository.findByLogin(userLogin)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+
         produtosEntity.setDono_produto_id(donoProduto);
 
         return this.produtosRepository.save(produtosEntity);

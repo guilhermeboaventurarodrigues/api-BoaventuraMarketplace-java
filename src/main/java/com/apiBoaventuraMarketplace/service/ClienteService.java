@@ -1,5 +1,6 @@
 package com.apiBoaventuraMarketplace.service;
 
+import com.apiBoaventuraMarketplace.entity.dto.LoginRequest;
 import com.apiBoaventuraMarketplace.repository.ClienteRepository;
 import com.apiBoaventuraMarketplace.entity.ClienteEntity;
 import jakarta.transaction.Transactional;
@@ -56,8 +57,8 @@ public class ClienteService {
         }
     }
 
-    public Boolean validarSenha(ClienteEntity cliente){
-        String senha = clienteRepository.getById(cliente.getId()).getPassword();
+    public Boolean validarSenha(LoginRequest cliente){
+        String senha = clienteRepository.findByLogin(cliente.getLogin()).get().getPassword();
         Boolean valid = passwordEncoder.matches(cliente.getPassword(), senha);
         return valid;
     }
