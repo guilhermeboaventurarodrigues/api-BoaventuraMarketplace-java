@@ -21,7 +21,7 @@
 - **Autenticação**: JWT
 - **Testes**: JUnit
 - **CI/CD**: GitHub Actions para automação de build, testes e deploy
-
+- **Outros**: Swagger
 ---
 
 ## Como Rodar Localmente
@@ -59,4 +59,10 @@ jwt.expiration=3600000
 
 ```bash
 docker-compose up --build
+```
+
+### 5. **Acesse o Swagger para interagir**
+
+```bash
+http://localhost:8080/swagger-ui.html
 ```

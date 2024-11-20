@@ -3,12 +3,12 @@ version: '3.8'
 services:
   mysql:
     image: mysql:8.0
-    container_name: mysql-marketplace
+    container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${DOCKER_MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DOCKER_MYSQL_DATABASE}
-      MYSQL_USER: ${DOCKER_MYSQL_USER}
-      MYSQL_PASSWORD: ${DOCKER_MYSQL_PASSWORD}
+      MYSQL_USER: ${DOCKER_SPRING_DATASOURCE_USERNAME}
+      MYSQL_PASSWORD: ${DOCKER_SPRING_DATASOURCE_PASSWORD}
     ports:
       - "3306:3306"
     volumes:

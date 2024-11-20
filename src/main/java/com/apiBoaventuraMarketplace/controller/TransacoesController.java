@@ -4,6 +4,7 @@ package com.apiBoaventuraMarketplace.controller;
 import com.apiBoaventuraMarketplace.entity.dto.GetPedidosDTO;
 import com.apiBoaventuraMarketplace.entity.dto.SetPedidosDTO;
 import com.apiBoaventuraMarketplace.service.TransacoesService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/transacoes")
+@Tag(name = "Transações", description = "Endpoints de transações")
 public class TransacoesController {
     private TransacoesService transacoesService;
 

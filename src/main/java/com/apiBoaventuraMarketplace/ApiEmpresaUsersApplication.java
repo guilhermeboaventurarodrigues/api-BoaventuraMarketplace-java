@@ -3,8 +3,7 @@ package com.apiBoaventuraMarketplace;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import io.github.cdimascio.dotenv.Dotenv;
-
-import io.github.cdimascio.dotenv.Dotenv;
+import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
 public class ApiEmpresaUsersApplication {
@@ -19,6 +18,19 @@ public class ApiEmpresaUsersApplication {
 		System.setProperty("spring.jpa.properties.hibernate.dialect", dotenv.get("SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT"));
 		System.setProperty("jwtSecret", dotenv.get("jwt.secret"));
 
-		SpringApplication.run(ApiEmpresaUsersApplication.class, args);
+		ConfigurableApplicationContext context = SpringApplication.run(ApiEmpresaUsersApplication.class, args);
+
+		String port = context.getEnvironment().getProperty("server.port", "8080");
+
+		String swaggerLink = String.format(
+				"\n" +
+						"════════════════════════════════════════════════════════\n" +
+						"             🌐 Swagger UI Disponível 📘               \n" +
+						"             http://localhost:%s/swagger-ui.html      \n" +
+						"════════════════════════════════════════════════════════\n",
+				port
+		);
+
+		System.out.println(swaggerLink);
 	}
 }

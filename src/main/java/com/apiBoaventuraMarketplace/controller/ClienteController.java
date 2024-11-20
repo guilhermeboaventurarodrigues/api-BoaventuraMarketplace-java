@@ -3,6 +3,7 @@ package com.apiBoaventuraMarketplace.controller;
 import com.apiBoaventuraMarketplace.entity.ClienteEntity;
 import com.apiBoaventuraMarketplace.entity.dto.LoginRequest;
 import com.apiBoaventuraMarketplace.service.ClienteService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import java.util.List;
 @RestController
 
 @RequestMapping("clientes")
+@Tag(name = "Clientes", description = "Endpoints de clientes")
 public class ClienteController {
     private ClienteService clienteService;
 

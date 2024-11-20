@@ -20,11 +20,11 @@ public class ProdutosController {
         this.produtosService = produtosService;
     }
 
-//    @PostMapping("/create")
-//    public ResponseEntity<ProdutosEntity> create(@RequestBody @Valid SetProdutosDTO prod) {
-//        ProdutosEntity prodCreate = produtosService.create(prod);
-//        return ResponseEntity.status(201).body(prodCreate);
-//    }
+    @PostMapping("/create")
+    public ResponseEntity<ProdutosEntity> create(@RequestBody @Valid SetProdutosDTO prod) {
+        ProdutosEntity prodCreate = produtosService.create(prod);
+        return ResponseEntity.status(201).body(prodCreate);
+    }
 
     @GetMapping("/get")
     ResponseEntity<List<GetProdutosDTO>> listAll() {

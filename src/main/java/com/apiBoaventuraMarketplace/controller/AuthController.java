@@ -6,6 +6,8 @@ import com.apiBoaventuraMarketplace.entity.dto.LoginRequest;
 import com.apiBoaventuraMarketplace.repository.ClienteRepository;
 import com.apiBoaventuraMarketplace.service.ClienteService;
 import com.apiBoaventuraMarketplace.service.JwtService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Autenticação", description = "Endpoints de autenticação")
 public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -37,6 +40,7 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
+    @Operation(summary = "Realizar login", description = "Endpoint para autenticação")
     public ResponseEntity<?> login(@RequestBody LoginRequest cliente) {
         // Validar senha
         Boolean senhaValida = clienteService.validarSenha(cliente);

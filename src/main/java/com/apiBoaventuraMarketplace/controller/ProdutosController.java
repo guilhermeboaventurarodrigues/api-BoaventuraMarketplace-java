@@ -5,6 +5,7 @@ import com.apiBoaventuraMarketplace.entity.dto.SetProdutosDTO;
 import com.apiBoaventuraMarketplace.entity.dto.UpdateProdutosDTO;
 import com.apiBoaventuraMarketplace.entity.ProdutosEntity;
 import com.apiBoaventuraMarketplace.service.ProdutosService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/produtos")
+@Tag(name = "Produtos", description = "Endpoints de produtos")
 public class ProdutosController {
     private ProdutosService produtosService;
 
