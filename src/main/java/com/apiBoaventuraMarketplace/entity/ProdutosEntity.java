@@ -2,6 +2,7 @@ package com.apiBoaventuraMarketplace.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,6 +29,6 @@ public class ProdutosEntity {
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "dono_produto_id", nullable = false)
+    @JoinColumn(name = "dono_produto_id", nullable = true)
     private ClienteEntity dono_produto_id;
 }
